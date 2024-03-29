@@ -91,7 +91,29 @@ window.addEventListener('load', function(){
         }
     }
     class Enemy {
-
+        constructor(game){
+            this.game = game;
+            this.x = this.game.width; //declare x now, declare y in subclasses depending on enemy size
+            this.speedX = Math.random() * -1.5 - 0.5;
+            this.markedForDeletion = false;
+        }
+        update(){
+            this.x += this.speedX;
+            if(this.x + this.width < 0) this.markedForDeletion = true;
+        }
+        draw(context){
+            context.fillStyle = 'red';
+            context.fillRect(this.x, this.y, this.width, this.height);
+        }
+        
+    }
+    class Knight1 extends Enemy {
+        constructor(game){
+            super(game);
+            this.width = 50;
+            this. height = 50;
+            this.y = Math.random() * (this.game.height * 0.9 - this.height);
+        }
     }
     class Layer {
 
@@ -123,10 +145,14 @@ window.addEventListener('load', function(){
             this.input = new InputHandler(this);
             this.ui = new UI(this);
             this.keys = [];
+            this.enemies = [];
+            this.enemyTimer = 0;
+            this.enemyInterval = 1000;
             this.ammo = 20;
             this.maxAmmo = 20;
             this.ammoTimer = 0;
             this.ammoInterval = 1000;
+            this.gameover = false;
         }
         update(deltaTime){
             this.player.update();
@@ -136,10 +162,36 @@ window.addEventListener('load', function(){
             } else {
                 this.ammoTimer += deltaTime;
             }
+            this.enemies.forEach(enemy => {
+                enemy.update();
+                if (this.checkCollision(this.player, enemy)){
+                    enemy.markedForDeletion = true;
+                }
+            });
+            this.enemies = this.enemies.filter(enemy => !enemy.markedForDeletion);
+            if (this.enemyTimer > this.enemyInterval && !this.gameover){
+                this.addEnemy();
+                this.enemyTimer = 0;
+            } else {
+                this.enemyTimer += deltaTime;
+            }
         }
         draw(context){
             this.player.draw(context);
             this.ui.draw(context);
+            this.enemies.forEach(enemy => {
+                enemy.draw(context);
+            });
+        }
+        addEnemy(){
+            this.enemies.push(new Knight1(this));
+        }
+        checkCollision(rect1, rect2){ //if all are true returns true they do collide
+            return(     rect1.x < rect2.x + rect2.width &&
+                        rect1.x + rect1.width > rect2.x &&
+                        rect1.y < rect2.y + rect2.height &&
+                        rect1.height + rect1.y > rect2.y)
+
         }
     }
     const game = new Game(canvas.width, canvas.height);
@@ -151,7 +203,7 @@ window.addEventListener('load', function(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         game.update(deltaTime); //uses millisec so event will happen at same time on diff computers.
         game.draw(ctx);
-        window.requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
     }
     animate(0);
 });
