@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#gameCanvas {
+    border: Spx solid black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: blue;
+}
+
+
+#layer1, #layer2, #layer3, #layer4 {
+    display: none;
+}
