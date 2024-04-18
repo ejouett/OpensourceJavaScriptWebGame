@@ -209,7 +209,7 @@ window.addEventListener('load', function(){
                 if (this.game.score > this.game.winningScore){
                     msg1 = 'You Win Congrats!';
                     msg2 = 'nice job!';
-                } else if(this.game.lives < 0) {
+                } else  {
                     msg1 = 'You lost haha';
                     msg2 = 'Better luck next time';
                 }
@@ -238,7 +238,7 @@ window.addEventListener('load', function(){
             this.ammoInterval = 1000;
             this.gameover = false;
             this.score = 0;
-            this.winningScore = 20;
+            this.winningScore = 5;
             this.speed = 1;
             this.lives = 3
             this.minHealth = 1;
@@ -258,7 +258,7 @@ window.addEventListener('load', function(){
                 if (this.checkCollision(this.player, enemy)){
                     this.player.lives--; //new
                     enemy.markedForDeletion = true;
-                    if(this.player.lives <= 0){   //new
+                    if(this.player.lives < 0){   //new
                         this.gameover = true;
                     }
           //          
