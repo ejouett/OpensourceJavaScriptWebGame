@@ -2,8 +2,8 @@ window.addEventListener('load', function(){
 // SETUP
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-    canvas.width = 600;
-    canvas.height = 600;
+    canvas.width = 900;
+    canvas.height = 500;
 
     class InputHandler { //handles input from user like arrow keys
        constructor(game){
@@ -68,7 +68,7 @@ window.addEventListener('load', function(){
             //this.markedForDeletion = false;//new
             this.lives = 3; //new
             this.score = this.lives; //new
-            this.image = document.getElementById('player');
+            this.image = document.getElementById('players');
 
         }
         update(){
@@ -147,17 +147,18 @@ window.addEventListener('load', function(){
             this.image = image;
             this.speedMod = speedMod;
            // this.door = door;
-            this.width = 1755;
-            this.height = 600;
+            this.width = 1768;
+            this.height = 500;
             this.x = 0;
             this.y = 0;
         }
         update(){
-           // if(this.x <= this.width) this.x = 0;
-          //  else this.x -= this.game.speed * this.speedMod;
+            if(this.x <= this.width) this.x = 0;
+            else this.x -= this.game.speed * this.speedMod;
         }
         draw(context){
             context.drawImage(this.image, this.x, this.y);
+            context.drawImage(this.image, this.x + this.width, this.y);
         }
     }
     class Backround {
@@ -165,8 +166,14 @@ window.addEventListener('load', function(){
             this.game = game;
             this.player = player;
             this.image1 = document.getElementById('layer1');
+            this.image2 = document.getElementById('layer2');
+            this.image3 = document.getElementById('layer3');
+            this.image4 = document.getElementById('layer4');
             this.layer1 = new Layer(this.game, this.image1, 1);
-            this.layers = [this.layer1];
+            this.layer2 = new Layer(this.game, this.image2, 2);
+            this.layer3 = new Layer(this.game, this.image3, 3);
+            this.layer4 = new Layer(this.game, this.image4, 4);
+            this.layers = [this.layer1, this.layer2, this.layer3, this. layer4];
         }
         update(){
             this.layers.forEach(layer => layer.update());
